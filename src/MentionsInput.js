@@ -535,8 +535,6 @@ class MentionsInput extends React.Component {
 
     let mentions = getMentions(newValue, config)
 
-    console.log({ mentions, newValue, config })
-
     // Propagate change
     // let handleChange = this.getOnChange(this.props) || emptyFunction;
     let eventMock = { target: { value: newValue } }

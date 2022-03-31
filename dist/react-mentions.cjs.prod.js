@@ -903,13 +903,7 @@ var makeTriggerRegex = function(trigger) {
         selectionEnd: selectionEnd,
         setSelectionAfterMentionChange: setSelectionAfterMentionChange
       });
-      var mentions = getMentions(newValue, config);
-      console.log({
-        mentions: mentions,
-        newValue: newValue,
-        config: config
-      });
-      var eventMock = {
+      var mentions = getMentions(newValue, config), eventMock = {
         target: {
           value: newValue
         }

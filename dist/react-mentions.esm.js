@@ -1467,12 +1467,7 @@ function (_React$Component) {
         setSelectionAfterMentionChange: setSelectionAfterMentionChange
       });
 
-      var mentions = getMentions(newValue, config);
-      console.log({
-        mentions: mentions,
-        newValue: newValue,
-        config: config
-      }); // Propagate change
+      var mentions = getMentions(newValue, config); // Propagate change
       // let handleChange = this.getOnChange(this.props) || emptyFunction;
 
       var eventMock = {
