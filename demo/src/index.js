@@ -22,4 +22,14 @@ const Demo = () => (
   </div>
 )
 
-render(<Demo />, document.querySelector('#demo'))
+const root = document.getElementById('demo')
+
+let shadow = root.attachShadow({ mode: 'open' })
+
+const mountingPoint = document.createElement('div')
+
+shadow.appendChild(mountingPoint)
+
+render(<Demo />, mountingPoint)
+
+// render(<Demo />, root)
