@@ -813,6 +813,7 @@ var makeTriggerRegex = function(trigger) {
       }, !readOnly && !disabled && {
         onChange: _this.handleChange,
         onSelect: _this.handleSelect,
+        onFocus: _this.handleSelect,
         onKeyDown: _this.handleKeyDown,
         onBlur: _this.handleBlur,
         onCompositionStart: _this.handleCompositionStart,
@@ -910,14 +911,16 @@ var makeTriggerRegex = function(trigger) {
       };
       _this.executeOnChange(eventMock, newValue, newPlainTextValue, mentions);
     }), _defineProperty(_assertThisInitialized(_this), "handleSelect", function(ev) {
-      if (_this.setState({
-        selectionStart: ev.target.selectionStart,
-        selectionEnd: ev.target.selectionEnd
-      }), !isComposing) {
-        var el = _this.inputElement;
-        ev.target.selectionStart === ev.target.selectionEnd ? _this.updateMentionsQueries(el.value, ev.target.selectionStart) : _this.clearSuggestions(), 
-        _this.updateHighlighterScroll(), _this.props.onSelect(ev);
-      }
+      requestAnimationFrame(function() {
+        if (_this.setState({
+          selectionStart: ev.target.selectionStart,
+          selectionEnd: ev.target.selectionEnd
+        }), !isComposing) {
+          var el = _this.inputElement;
+          ev.target.selectionStart === ev.target.selectionEnd ? _this.updateMentionsQueries(el.value, ev.target.selectionStart) : _this.clearSuggestions(), 
+          _this.updateHighlighterScroll(), _this.props.onSelect(ev);
+        }
+      });
     }), _defineProperty(_assertThisInitialized(_this), "handleKeyDown", function(ev) {
       if (0 !== countSuggestions(_this.state.suggestions) && _this.suggestionsElement) switch (Object.values(KEY).indexOf(ev.keyCode) >= 0 && (ev.preventDefault(), 
       ev.stopPropagation()), ev.keyCode) {

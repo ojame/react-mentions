@@ -1279,6 +1279,7 @@ function (_React$Component) {
       }, !readOnly && !disabled && {
         onChange: _this.handleChange,
         onSelect: _this.handleSelect,
+        onFocus: _this.handleSelect,
         onKeyDown: _this.handleKeyDown,
         onBlur: _this.handleBlur,
         onCompositionStart: _this.handleCompositionStart,
@@ -1480,27 +1481,30 @@ function (_React$Component) {
     });
 
     _defineProperty(_assertThisInitialized(_this), "handleSelect", function (ev) {
-      // keep track of selection range / caret position
-      _this.setState({
-        selectionStart: ev.target.selectionStart,
-        selectionEnd: ev.target.selectionEnd
-      }); // do nothing while a IME composition session is active
+      // need to do this after the next frame because `onFocus` has a caret position of 0 until it's actually focused
+      requestAnimationFrame(function () {
+        // keep track of selection range / caret position
+        _this.setState({
+          selectionStart: ev.target.selectionStart,
+          selectionEnd: ev.target.selectionEnd
+        }); // do nothing while a IME composition session is active
 
 
-      if (isComposing) return; // refresh suggestions queries
+        if (isComposing) return; // refresh suggestions queries
 
-      var el = _this.inputElement;
+        var el = _this.inputElement;
 
-      if (ev.target.selectionStart === ev.target.selectionEnd) {
-        _this.updateMentionsQueries(el.value, ev.target.selectionStart);
-      } else {
-        _this.clearSuggestions();
-      } // sync highlighters scroll position
+        if (ev.target.selectionStart === ev.target.selectionEnd) {
+          _this.updateMentionsQueries(el.value, ev.target.selectionStart);
+        } else {
+          _this.clearSuggestions();
+        } // sync highlighters scroll position
 
 
-      _this.updateHighlighterScroll();
+        _this.updateHighlighterScroll();
 
-      _this.props.onSelect(ev);
+        _this.props.onSelect(ev);
+      });
     });
 
     _defineProperty(_assertThisInitialized(_this), "handleKeyDown", function (ev) {
