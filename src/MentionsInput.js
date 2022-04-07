@@ -200,6 +200,7 @@ class MentionsInput extends React.Component {
         !disabled && {
           onChange: this.handleChange,
           onSelect: this.handleSelect,
+          onFocus: this.handleSelect,
           onKeyDown: this.handleKeyDown,
           onBlur: this.handleBlur,
           onCompositionStart: this.handleCompositionStart,
@@ -472,6 +473,7 @@ class MentionsInput extends React.Component {
   // Handle input element's change event
   handleChange = (ev) => {
     this.handleSelect(ev)
+
     isComposing = false
     if (isIE()) {
       // if we are inside iframe, we need to find activeElement within its contentDocument
@@ -544,27 +546,30 @@ class MentionsInput extends React.Component {
 
   // Handle input element's select event
   handleSelect = (ev) => {
-    // keep track of selection range / caret position
-    this.setState({
-      selectionStart: ev.target.selectionStart,
-      selectionEnd: ev.target.selectionEnd,
+    // need to do this after the next frame because `onFocus` has a caret position of 0 until it's actually focused
+    requestAnimationFrame(() => {
+      // keep track of selection range / caret position
+      this.setState({
+        selectionStart: ev.target.selectionStart,
+        selectionEnd: ev.target.selectionEnd,
+      })
+
+      // do nothing while a IME composition session is active
+      if (isComposing) return
+
+      // refresh suggestions queries
+      const el = this.inputElement
+      if (ev.target.selectionStart === ev.target.selectionEnd) {
+        this.updateMentionsQueries(el.value, ev.target.selectionStart)
+      } else {
+        this.clearSuggestions()
+      }
+
+      // sync highlighters scroll position
+      this.updateHighlighterScroll()
+
+      this.props.onSelect(ev)
     })
-
-    // do nothing while a IME composition session is active
-    if (isComposing) return
-
-    // refresh suggestions queries
-    const el = this.inputElement
-    if (ev.target.selectionStart === ev.target.selectionEnd) {
-      this.updateMentionsQueries(el.value, ev.target.selectionStart)
-    } else {
-      this.clearSuggestions()
-    }
-
-    // sync highlighters scroll position
-    this.updateHighlighterScroll()
-
-    this.props.onSelect(ev)
   }
 
   handleKeyDown = (ev) => {
