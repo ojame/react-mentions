@@ -201,6 +201,7 @@ class MentionsInput extends React.Component {
           onChange: this.handleChange,
           onSelect: this.handleSelect,
           onFocus: this.handleSelect,
+          onMouseUp: this.handleSelect,
           onKeyDown: this.handleKeyDown,
           onBlur: this.handleBlur,
           onCompositionStart: this.handleCompositionStart,
