@@ -1288,6 +1288,7 @@ function (_React$Component) {
         onChange: _this.handleChange,
         onSelect: _this.handleSelect,
         onFocus: _this.handleSelect,
+        onMouseUp: _this.handleSelect,
         onKeyDown: _this.handleKeyDown,
         onBlur: _this.handleBlur,
         onCompositionStart: _this.handleCompositionStart,
